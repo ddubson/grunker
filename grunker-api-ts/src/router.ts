@@ -1,5 +1,5 @@
 import {Express} from "express";
-import {fetchN311Items, Nyc311DataItem} from "./OpenDataRepository";
+import {fetchN311Items, Nyc311DataItem} from "./OpenDataGateway";
 
 export const router = (app: Express) => {
   app.get("/grunker/api/nyc311", (req, res) => {

@@ -1,5 +1,5 @@
 import express from "express";
-import {requiredEnvVarsExist} from "./OpenDataRepository";
+import {requiredEnvVarsExist} from "./OpenDataGateway";
 import {router} from "./router";
 import cors from "cors";
 
