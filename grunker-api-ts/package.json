@@ -1,0 +1,23 @@
+{
+  "name": "grunker-api-ts",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc -w --outDir dist/ | nodemon --watch dist/",
+    "runOnce:opendata": "tsc --outDir dist/ && node dist/OpenDataRunOnce.js"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/node": "^14.0.5",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
