@@ -1,4 +1,5 @@
 import {Pool, PoolClient} from "pg";
+import {fetchN311Items} from "./OpenDataGateway";
 
 const createNyc311Schema = `
     CREATE SCHEMA IF NOT EXISTS grunkschema;
@@ -12,13 +13,18 @@ const createNyc311Schema = `
     );
 `;
 
+const initialNyc311Dml = `
+  INSERT INTO grunkschema.nyc311 (unique_key, agency, status, descriptor, city)
+    VALUES ($1, $2, $3, $4, $5);
+`;
+
+const nyc311CountRowsQuery = "SELECT COUNT(*) as rowCount FROM grunkschema.nyc311";
+const selectFirstFiveQuery = "SELECT * FROM grunkschema.nyc311 LIMIT 5";
+
 export const pgPool = (): Pool => {
   const pool = new Pool();
 
   pool.connect().then(client => {
-    client.query("SELECT NOW()", (err, res) => {
-      console.log("Connected to PgSql");
-    });
     client.query(createNyc311Schema, (err, res) => {
       if (err) {
         console.error("Schema creation failed. ", err);
@@ -26,16 +32,44 @@ export const pgPool = (): Pool => {
         console.log("Grunker DDL applied!");
       }
     });
-    client.release();
+
+    const rowCount = async () => await client.query(nyc311CountRowsQuery)
+      .then((res) => Number(res.rows[0].rowcount));
+
+    rowCount().then((count) => {
+      if (count === 0) {
+        console.log("Grunker DB is empty. Hydrating. Please wait!")
+        fetchN311Items(10).then((items) => {
+          items.forEach(item => {
+            client.query(initialNyc311Dml,
+              [item.unique_key, item.agency, item.status, item.descriptor, item.city],
+              (err, res) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log(`Record ${item.unique_key} inserted.`)
+                }
+              });
+          });
+        });
+      } else {
+        console.log("Grunker DB has data. Skipping hydration.");
+      }
+    });
+
+    console.log("Grunker DB is ready!");
   });
 
   return pool;
 }
 
 export const newOpenDataRepository = (pgPool: Pool) => {
-  const fetchFirstFiveRecords = (onSuccess) => {
-    pgPool.query("SELECT * FROM nyc_311_data LIMIT 5", (err, res) => {
-      onSuccess(res.rows)
+  const fetchFirstFiveRecords = (onSuccess: (rows: any[]) => void) => {
+    pgPool.query(selectFirstFiveQuery)
+      .then(res => {
+        onSuccess(res.rows)
+      }).catch(err => {
+      console.error(err);
     })
   }
 

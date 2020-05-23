@@ -14,12 +14,10 @@ function App() {
   const [items, setItems] = useState([])
 
   useEffect(() => {
-    axios.get("http://localhost:5000/grunker/api/nyc311", {
-      timeout: 500000
-    })
+    axios.get("http://localhost:5000/grunker/api/nyc311")
       .then((response) => response.data)
       .then(items => setItems(items))
-  })
+  }, [])
 
   return (
     <>
