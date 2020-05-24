@@ -1,5 +1,10 @@
 # Grunker
 
+## Pre-requisites
+
+- NodeJS >= v14.3.0
+- yarn >= 1.22.4
+
 ## Grunk 1: NYC OpenData querying samples
 
 ### Web

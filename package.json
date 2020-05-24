@@ -1,0 +1,12 @@
+{
+  "name": "grunker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ddubson/grunker.git",
+  "author": "Dmitriy Dubson <d.dubson@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "first-run:win": ".\\scripts\\first-run.bat",
+    "first-run:nix": "./scripts/first-run.sh"
+  }
+}
