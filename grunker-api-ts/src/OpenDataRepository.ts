@@ -19,7 +19,7 @@ const initialNyc311Dml = `
 `;
 
 const nyc311CountRowsQuery = "SELECT COUNT(*) as rowCount FROM grunkschema.nyc311";
-const selectFirstFiveQuery = "SELECT * FROM grunkschema.nyc311 LIMIT 5";
+const selectAllRecords = "SELECT * FROM grunkschema.nyc311";
 
 export const pgPool = (): Pool => {
   const pool = new Pool();
@@ -39,7 +39,7 @@ export const pgPool = (): Pool => {
     rowCount().then((count) => {
       if (count === 0) {
         console.log("Grunker DB is empty. Hydrating. Please wait!")
-        fetchN311Items(10).then((items) => {
+        fetchN311Items(100).then((items) => {
           items.forEach(item => {
             client.query(initialNyc311Dml,
               [item.unique_key, item.agency, item.status, item.descriptor, item.city],
@@ -64,8 +64,8 @@ export const pgPool = (): Pool => {
 }
 
 export const newOpenDataRepository = (pgPool: Pool) => {
-  const fetchFirstFiveRecords = (onSuccess: (rows: any[]) => void) => {
-    pgPool.query(selectFirstFiveQuery)
+  const fetchAllRecords = (onSuccess: (rows: any[]) => void) => {
+    pgPool.query(selectAllRecords)
       .then(res => {
         onSuccess(res.rows)
       }).catch(err => {
@@ -74,6 +74,6 @@ export const newOpenDataRepository = (pgPool: Pool) => {
   }
 
   return {
-    fetchFirstFiveRecords
+    fetchAllRecords
   }
 }
