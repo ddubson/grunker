@@ -1,6 +1,6 @@
 import {Express} from "express";
-import {Nyc311DataItem} from "./OpenDataGateway";
 import {newOpenDataRepository, pgPool} from "./OpenDataRepository";
+import {Nyc311DataItem} from "./Nyc311DataItem";
 
 const openDataRepository = newOpenDataRepository(pgPool());
 

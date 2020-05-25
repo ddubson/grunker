@@ -18,6 +18,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "@types/moment": "^2.13.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",

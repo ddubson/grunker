@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Navbar, NavbarBrand, Table} from "react-bootstrap";
 import axios from "axios";
+import moment from "moment";
 
 interface Nyc311DataItem {
   unique_key: string;
+  created_date: string;
   agency: string;
   status: string;
   descriptor: string;
@@ -21,6 +23,7 @@ function App() {
 
   const renderItem = (item: Nyc311DataItem) => (
     <tr key={item.unique_key}>
+      <td>{moment.utc(item.created_date).format("LLLL")}</td>
       <td>{item.agency}</td>
       <td>{item.city}</td>
       <td>{item.descriptor}</td>
@@ -39,6 +42,7 @@ function App() {
         <Table>
           <thead>
           <tr>
+            <th>Created Date</th>
             <th>Agency</th>
             <th>City</th>
             <th>Descriptor</th>

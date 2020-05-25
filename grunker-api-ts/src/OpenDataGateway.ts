@@ -1,14 +1,7 @@
 import axios, {AxiosResponse} from "axios";
+import {Nyc311DataItem} from "./Nyc311DataItem";
 
 const nyc311Url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
-
-export interface Nyc311DataItem {
-  unique_key: string;
-  agency: string;
-  status: string;
-  descriptor: string;
-  city: string;
-}
 
 export const requiredEnvVarsExist = (): boolean => {
   const appTokenExists = !!process.env.NYC_OPEN_DATA_APP_TOKEN

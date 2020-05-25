@@ -1,4 +1,5 @@
-import {fetchN311Items, Nyc311DataItem, requiredEnvVarsExist} from "./OpenDataGateway";
+import {fetchN311Items, requiredEnvVarsExist} from "./OpenDataGateway";
+import {Nyc311DataItem} from "./Nyc311DataItem";
 
 const openDataRunOnce = async () => {
   console.log("Verifying env is setup right...")

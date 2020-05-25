@@ -1,25 +1,8 @@
 import {Pool, PoolClient} from "pg";
 import {fetchN311Items} from "./OpenDataGateway";
+import {createNyc311Schema, initialNyc311Dml, nyc311CountRowsQuery, selectAllRecords} from "./OpenDataSchema";
 
-const createNyc311Schema = `
-    CREATE SCHEMA IF NOT EXISTS grunkschema;
-    
-    CREATE TABLE IF NOT EXISTS grunkschema.nyc311 (
-        unique_key VARCHAR(20) PRIMARY KEY,
-        agency VARCHAR(50) NULL ,
-        status VARCHAR(50) NULL ,
-        descriptor VARCHAR(500) NULL ,
-        city VARCHAR(100) NULL
-    );
-`;
-
-const initialNyc311Dml = `
-  INSERT INTO grunkschema.nyc311 (unique_key, agency, status, descriptor, city)
-    VALUES ($1, $2, $3, $4, $5);
-`;
-
-const nyc311CountRowsQuery = "SELECT COUNT(*) as rowCount FROM grunkschema.nyc311";
-const selectAllRecords = "SELECT * FROM grunkschema.nyc311";
+const numberOfRecordsToFetch = 3000;
 
 export const pgPool = (): Pool => {
   const pool = new Pool();
@@ -39,10 +22,10 @@ export const pgPool = (): Pool => {
     rowCount().then((count) => {
       if (count === 0) {
         console.log("Grunker DB is empty. Hydrating. Please wait!")
-        fetchN311Items(100).then((items) => {
+        fetchN311Items(numberOfRecordsToFetch).then((items) => {
           items.forEach(item => {
             client.query(initialNyc311Dml,
-              [item.unique_key, item.agency, item.status, item.descriptor, item.city],
+              [item.unique_key, item.created_date, item.agency, item.status, item.descriptor, item.city],
               (err, res) => {
                 if (err) {
                   console.error(err);
@@ -68,9 +51,10 @@ export const newOpenDataRepository = (pgPool: Pool) => {
     pgPool.query(selectAllRecords)
       .then(res => {
         onSuccess(res.rows)
-      }).catch(err => {
-      console.error(err);
-    })
+      })
+      .catch(err => {
+        console.error(err);
+      })
   }
 
   return {
