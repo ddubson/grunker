@@ -5,6 +5,19 @@
 - NodeJS >= v14.3.0
 - yarn >= 1.22.4
 
+### nix
+
+```bash
+yarn first-run:nix
+```
+
+### Windows
+
+```powershell
+npm config set script-shell powershell
+yarn first-run:win
+```
+
 ## Grunk 1: NYC OpenData querying samples
 
 ### Web
@@ -32,3 +45,7 @@ ALTER ROLE grunkuser CREATEDB;
 
 CREATE DATABASE grunk_store;
 ```
+
+## Future Grunks (TODOs)
+
+- Dependency (prerequisite validator)

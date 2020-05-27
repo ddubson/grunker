@@ -6,7 +6,7 @@
   "author": "Dmitriy Dubson <d.dubson@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "first-run:win": ".\\scripts\\first-run.bat",
+    "first-run:win": "./scripts/first-run.ps1",
     "first-run:nix": "./scripts/first-run.sh"
   }
 }
