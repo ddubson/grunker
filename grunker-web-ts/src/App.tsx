@@ -1,25 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Navbar, NavbarBrand, Table} from "react-bootstrap";
-import axios from "axios";
 import moment from "moment";
-
-interface Nyc311DataItem {
-  unique_key: string;
-  created_date: string;
-  agency: string;
-  status: string;
-  descriptor: string;
-  city: string;
-}
+import {Nyc311DataItem} from "../../grunker-api-ts/src/Nyc311DataItem";
+import {useNyc311Service} from "./useNyc311Service";
 
 function App() {
-  const [items, setItems] = useState([])
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/grunker/api/nyc311")
-      .then((response) => response.data)
-      .then(items => setItems(items))
-  }, [])
+  const items = useNyc311Service();
 
   const renderItem = (item: Nyc311DataItem) => (
     <tr key={item.unique_key}>
