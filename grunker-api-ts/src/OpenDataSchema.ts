@@ -13,7 +13,11 @@ const createTable = `
     );
 `;
 
-export const createNyc311Schema = `${createSchema} ${createTable}`;
+const createIndex = `
+  CREATE INDEX IF NOT EXISTS nyc311_id ON grunkschema.nyc311 (unique_key);
+`;
+
+export const createNyc311Schema = `${createSchema} ${createTable} ${createIndex}`;
 
 export const initialNyc311Dml = `
   INSERT INTO grunkschema.nyc311 (unique_key, created_date, agency, status, descriptor, city)
