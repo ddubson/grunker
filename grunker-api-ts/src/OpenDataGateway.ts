@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {Nyc311DataItem} from "./Nyc311DataItem";
+import {Nyc311Complaint} from "../../grunker-domain-ts/Nyc311Complaint";
 
 const nyc311Url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
 
@@ -20,4 +20,4 @@ export const fetchN311Items = async (numberOfRecords: number) =>
     headers: {
       "X-App-Token": process.env.NYC_OPEN_DATA_APP_TOKEN
     }
-  }).then((response: AxiosResponse<Nyc311DataItem[]>) => response.data)
+  }).then((response: AxiosResponse<Nyc311Complaint[]>) => response.data)

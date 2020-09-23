@@ -1,13 +1,13 @@
 import React from 'react';
 import {Navbar, NavbarBrand, Table} from "react-bootstrap";
 import moment from "moment";
-import {Nyc311DataItem} from "../../grunker-api-ts/src/Nyc311DataItem";
 import {useNyc311Service} from "./useNyc311Service";
+import {Nyc311Complaint} from "../../grunker-domain-ts/Nyc311Complaint";
 
 function App() {
   const items = useNyc311Service();
 
-  const renderItem = (item: Nyc311DataItem) => (
+  const renderItem = (item: Nyc311Complaint) => (
     <tr key={item.unique_key}>
       <td>{moment.utc(item.created_date).format("LLLL")}</td>
       <td>{item.agency}</td>

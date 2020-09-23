@@ -1,6 +1,7 @@
-import {Pool, PoolClient} from "pg";
+import {Pool} from "pg";
 import {fetchN311Items} from "./OpenDataGateway";
 import {createNyc311Schema, initialNyc311Dml, nyc311CountRowsQuery, selectAllRecords} from "./OpenDataSchema";
+import {FetchAllNyc311ComplaintsPagedResponse} from "../../grunker-domain-ts/Nyc311HttpTypes";
 
 const numberOfRecordsToFetch = 3000;
 
@@ -47,10 +48,13 @@ export const pgPool = (): Pool => {
 }
 
 export const newOpenDataRepository = (pgPool: Pool) => {
-  const fetchAllRecords = (onSuccess: (rows: any[]) => void) => {
+  const fetchAllRecords = (onSuccess: (response: FetchAllNyc311ComplaintsPagedResponse) => void) => {
     pgPool.query(selectAllRecords)
       .then(res => {
-        onSuccess(res.rows)
+        onSuccess({
+          complaints: res.rows,
+          paging: {total: 10}
+        })
       })
       .catch(err => {
         console.error(err);

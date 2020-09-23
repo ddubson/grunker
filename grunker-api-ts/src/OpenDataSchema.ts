@@ -25,4 +25,9 @@ export const initialNyc311Dml = `
 `;
 
 export const nyc311CountRowsQuery = "SELECT COUNT(*) as rowCount FROM grunkschema.nyc311";
-export const selectAllRecords = "SELECT * FROM grunkschema.nyc311";
+
+export const selectAllRecords = `
+  SELECT * FROM grunkschema.nyc311
+  ORDER BY created_date desc 
+  LIMIT 10 OFFSET 0
+`;

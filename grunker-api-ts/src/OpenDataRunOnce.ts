@@ -1,5 +1,5 @@
 import {fetchN311Items, requiredEnvVarsExist} from "./OpenDataGateway";
-import {Nyc311DataItem} from "./Nyc311DataItem";
+import {Nyc311Complaint} from "../../grunker-domain-ts/Nyc311Complaint";
 
 const openDataRunOnce = async () => {
   console.log("Verifying env is setup right...")
@@ -9,7 +9,7 @@ const openDataRunOnce = async () => {
   }
 
   console.log("Calling OpenData...");
-  await fetchN311Items(10).then((dataItems: Nyc311DataItem[]) => {
+  await fetchN311Items(10).then((dataItems: Nyc311Complaint[]) => {
     console.log(dataItems);
   }).catch(error => console.error("Error retrieving data: ", error));
 }
