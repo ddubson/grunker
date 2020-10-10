@@ -49,3 +49,8 @@ CREATE DATABASE grunk_store;
 ## Future Grunks (TODOs)
 
 - Dependency (prerequisite validator)
+
+## UI Enhancements
+
+- Icon sets: https://tablericons.com/
+- React component library: PrimeReact
