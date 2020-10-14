@@ -2,8 +2,7 @@ import {Pool} from "pg";
 import {fetchN311Items} from "./OpenDataGateway";
 import {createInitialDDL, initialNyc311Dml, nyc311CountRowsQuery, selectAllRecords} from "./OpenDataSchema";
 import {FetchAllNyc311ComplaintsPagedResponse} from "../../grunker-domain-ts/Nyc311HttpTypes";
-
-const numberOfRecordsToFetch = 3000;
+import {AppConfig} from "./config";
 
 export const pgPool = (): Pool => {
   const pool = new Pool({
@@ -25,7 +24,7 @@ export const pgPool = (): Pool => {
     rowCount().then((count) => {
       if (count === 0) {
         console.log("Grunker DB is empty. Hydrating. Please wait!")
-        fetchN311Items(numberOfRecordsToFetch).then((items) => {
+        fetchN311Items(AppConfig.OpenData.singleFetchRecordLimit).then((items) => {
           items.forEach(item => {
             client.query(initialNyc311Dml,
               [item.unique_key, item.created_date, item.agency, item.status, item.descriptor, item.city],

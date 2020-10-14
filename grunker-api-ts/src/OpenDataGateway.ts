@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {Nyc311Complaint} from "../../grunker-domain-ts/Nyc311Complaint";
-
-const nyc311Url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
+import {AppConfig} from "./config";
 
 export const requiredEnvVarsExist = (): boolean => {
   const appTokenExists = !!process.env.NYC_OPEN_DATA_APP_TOKEN
@@ -13,7 +12,7 @@ export const requiredEnvVarsExist = (): boolean => {
 }
 
 export const fetchN311Items = async (numberOfRecords: number) =>
-  axios.get(nyc311Url, {
+  axios.get(AppConfig.OpenData.nyc311dataUrl, {
     params: {
       "$limit": numberOfRecords,
     },
