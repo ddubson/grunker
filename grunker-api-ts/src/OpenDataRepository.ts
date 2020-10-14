@@ -1,15 +1,17 @@
 import {Pool} from "pg";
 import {fetchN311Items} from "./OpenDataGateway";
-import {createNyc311Schema, initialNyc311Dml, nyc311CountRowsQuery, selectAllRecords} from "./OpenDataSchema";
+import {createInitialDDL, initialNyc311Dml, nyc311CountRowsQuery, selectAllRecords} from "./OpenDataSchema";
 import {FetchAllNyc311ComplaintsPagedResponse} from "../../grunker-domain-ts/Nyc311HttpTypes";
 
 const numberOfRecordsToFetch = 3000;
 
 export const pgPool = (): Pool => {
-  const pool = new Pool();
+  const pool = new Pool({
+    connectionString: process.env.PG_CONNECTION_STRING
+  });
 
   pool.connect().then(client => {
-    client.query(createNyc311Schema, (err, res) => {
+    client.query(createInitialDDL, (err, res) => {
       if (err) {
         console.error("Schema creation failed. ", err);
       } else {
@@ -18,7 +20,7 @@ export const pgPool = (): Pool => {
     });
 
     const rowCount = async () => await client.query(nyc311CountRowsQuery)
-      .then((res) => Number(res.rows[0].rowcount));
+      .then((res) => Number(res.rows[0].rowcount)).catch(console.error);
 
     rowCount().then((count) => {
       if (count === 0) {
@@ -39,7 +41,7 @@ export const pgPool = (): Pool => {
       } else {
         console.log("Grunker DB has data. Skipping hydration.");
       }
-    });
+    }).catch(console.error);
 
     console.log("Grunker DB is ready!");
   });
@@ -56,9 +58,7 @@ export const newOpenDataRepository = (pgPool: Pool) => {
           paging: {total: 10}
         })
       })
-      .catch(err => {
-        console.error(err);
-      })
+      .catch(console.error);
   }
 
   return {

@@ -1,9 +1,4 @@
-const schema = "grunkschema";
-const table_nyc311 = `${schema}.nyc311`;
-
-const createSchema = `
-  CREATE SCHEMA IF NOT EXISTS ${schema};
-`;
+const table_nyc311 = `nyc311`;
 
 const createTable = `
     CREATE TABLE IF NOT EXISTS ${table_nyc311} (
@@ -20,14 +15,14 @@ const createIndex = `
   CREATE INDEX IF NOT EXISTS nyc311_id ON ${table_nyc311} (unique_key);
 `;
 
-export const createNyc311Schema = `${createSchema} ${createTable} ${createIndex}`;
+export const createInitialDDL = `${createTable} ${createIndex}`;
 
 export const initialNyc311Dml = `
   INSERT INTO ${table_nyc311} (unique_key, created_date, agency, status, descriptor, city)
     VALUES ($1, $2, $3, $4, $5, $6);
 `;
 
-export const nyc311CountRowsQuery = "SELECT COUNT(*) as rowCount FROM ${table_nyc311}";
+export const nyc311CountRowsQuery = `SELECT COUNT(*) as rowCount FROM ${table_nyc311}`;
 
 export const selectAllRecords = `
   SELECT * FROM ${table_nyc311}

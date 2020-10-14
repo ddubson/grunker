@@ -14,6 +14,6 @@ const openDataRunOnce = async () => {
   }).catch(error => console.error("Error retrieving data: ", error));
 }
 
-openDataRunOnce().then(r => console.log("done"));
+openDataRunOnce().then(r => console.log("done")).catch(console.error);
 
 
